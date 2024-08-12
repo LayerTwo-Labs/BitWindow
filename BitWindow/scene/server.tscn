@@ -1,0 +1,35 @@
+[gd_scene load_steps=2 format=3 uid="uid://ce2mbwdltb3tc"]
+
+[ext_resource type="Script" path="res://script/server.gd" id="1_w2u76"]
+
+[node name="Server" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_w2u76")
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 0
+offset_left = 247.0
+offset_top = 23.0
+offset_right = 892.0
+offset_bottom = 96.0
+text = "Network code debugging:"
+
+[node name="ButtonTestConnectionBitcoin" type="Button" parent="."]
+layout_mode = 0
+offset_left = 36.0
+offset_top = 83.0
+offset_right = 225.0
+offset_bottom = 114.0
+text = "Test Bitcoin connection"
+
+[node name="RPCRequests" type="Node" parent="."]
+
+[node name="HTTPRPCBTCGetBlockCount" type="HTTPRequest" parent="RPCRequests"]
+
+[connection signal="pressed" from="ButtonTestConnectionBitcoin" to="." method="_on_button_test_connection_bitcoin_pressed"]
+[connection signal="request_completed" from="RPCRequests/HTTPRPCBTCGetBlockCount" to="." method="_on_httprpcbtc_get_block_count_request_completed"]
