@@ -14,3 +14,7 @@ config/name="BitWindow"
 run/main_scene="res://scene/main_window.tscn"
 config/features=PackedStringArray("4.2", "Forward Plus")
 config/icon="res://icon.svg"
+
+[gui]
+
+theme/custom="res://theme.tres"
