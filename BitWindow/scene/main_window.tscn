@@ -1,7 +1,11 @@
-[gd_scene load_steps=3 format=3 uid="uid://ddrak8ln5u67w"]
+[gd_scene load_steps=6 format=3 uid="uid://ddrak8ln5u67w"]
 
 [ext_resource type="Script" path="res://script/main_window.gd" id="1_fxi36"]
 [ext_resource type="PackedScene" uid="uid://ce2mbwdltb3tc" path="res://scene/server.tscn" id="2_335kp"]
+[ext_resource type="StyleBox" uid="uid://do3pgd68vga3c" path="res://theme/background_flat_style_box.tres" id="3_it7rq"]
+[ext_resource type="Texture2D" uid="uid://dddtuaqltlbg7" path="res://image/bitcoin.png" id="4_s21x0"]
+
+[sub_resource type="ButtonGroup" id="ButtonGroup_ifbhb"]
 
 [node name="MainWindow" type="Control"]
 layout_mode = 3
@@ -14,23 +18,331 @@ script = ExtResource("1_fxi36")
 
 [node name="Server" parent="." instance=ExtResource("2_335kp")]
 layout_mode = 1
-offset_left = 679.0
-offset_top = 4.0
-offset_right = 679.0
-offset_bottom = 4.0
+offset_left = 1171.0
+offset_top = 5.0
+offset_right = 1171.0
+offset_bottom = 5.0
 
-[node name="Label" type="Label" parent="."]
+[node name="MarginContainer" type="MarginContainer" parent="."]
 layout_mode = 0
-offset_right = 89.0
+offset_right = 1148.0
+offset_bottom = 651.0
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 4
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+
+[node name="HBoxContainerPageAndPageButtons" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="PanelContainerPageButtons" type="PanelContainer" parent="MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons"]
+layout_mode = 2
+theme_override_styles/panel = ExtResource("3_it7rq")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPageButtons"]
+layout_mode = 2
+
+[node name="ButtonOverview" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPageButtons/VBoxContainer"]
+layout_mode = 2
+toggle_mode = true
+button_pressed = true
+button_group = SubResource("ButtonGroup_ifbhb")
+text = "Overview"
+
+[node name="ButtonWallet" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPageButtons/VBoxContainer"]
+layout_mode = 2
+toggle_mode = true
+button_group = SubResource("ButtonGroup_ifbhb")
+text = "Bitcoin Wallet"
+
+[node name="ButtonSidechains" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPageButtons/VBoxContainer"]
+layout_mode = 2
+toggle_mode = true
+button_group = SubResource("ButtonGroup_ifbhb")
+text = "Sidechains"
+
+[node name="ButtonSettings" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPageButtons/VBoxContainer"]
+layout_mode = 2
+toggle_mode = true
+button_group = SubResource("ButtonGroup_ifbhb")
+text = "Settings"
+
+[node name="PanelContainerPages" type="PanelContainer" parent="MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons"]
+clip_contents = true
+custom_minimum_size = Vector2(900, 598)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = ExtResource("3_it7rq")
+
+[node name="OverviewPage" type="Control" parent="MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages"]
+layout_mode = 2
+
+[node name="GridContainer" type="GridContainer" parent="MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/OverviewPage"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+columns = 2
+
+[node name="PanelContainerBalances" type="PanelContainer" parent="MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/OverviewPage/GridContainer"]
+layout_mode = 2
+
+[node name="LabelBalances" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/OverviewPage/GridContainer/PanelContainerBalances"]
+layout_mode = 2
+text = "Balances:
+Bitcoin: 0.00000000
+Sidechains: 0.00000000"
+
+[node name="PanelContainerNetworkStats" type="PanelContainer" parent="MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/OverviewPage/GridContainer"]
+layout_mode = 2
+
+[node name="LabelNodeInfo" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/OverviewPage/GridContainer/PanelContainerNetworkStats"]
+layout_mode = 2
+text = "Node & Network:
+
+Bitcoin Node: \"/Satoshi:27.1.0/\" 
+Services: \"NETWORK\",  \"WITNESS\", \"NETWORK_LIMITED\", \"P2P_V2\"
+bestblockhash: \"000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f\"
+Network hashrate: 0 h/s
+Blockchain size on disk: 600 GB
+Warnings: None
+
+Wallet: ??? Unknown
+CUSF Client:  ??? Unknown
+ 
+"
+
+[node name="PanelContainerBlocks" type="PanelContainer" parent="MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/OverviewPage/GridContainer"]
+layout_mode = 2
+
+[node name="LabelBlocks" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/OverviewPage/GridContainer/PanelContainerBlocks"]
+layout_mode = 2
+text = "Bitcoin Blocks: 
+999,999
+
+Last block time:
+000000000000"
+
+[node name="PanelContainerMempool" type="PanelContainer" parent="MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/OverviewPage/GridContainer"]
+layout_mode = 2
+
+[node name="LabelMempool" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/OverviewPage/GridContainer/PanelContainerMempool"]
+layout_mode = 2
+text = "Mempool:
+Transactions: 0
+Size: 0 bytes
+Total fees : 0.00000000
+ 
+ 
+"
+
+[node name="WalletPage" type="Control" parent="MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages"]
+visible = false
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/WalletPage"]
+layout_mode = 0
+offset_right = 40.0
 offset_bottom = 23.0
-text = "Hello world"
+text = "Wallet
 
-[node name="LabelDebugBlockCount" type="Label" parent="."]
+No wallet connected..."
+
+[node name="SidechainPage" type="Control" parent="MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages"]
+visible = false
+layout_mode = 2
+
+[node name="GridContainer" type="GridContainer" parent="MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/SidechainPage"]
 layout_mode = 0
-offset_left = 20.0
-offset_top = 50.0
-offset_right = 60.0
-offset_bottom = 73.0
-text = "Bitcoin block count: ?"
+offset_right = 40.0
+offset_bottom = 40.0
+columns = 2
+
+[node name="EmptyGridItem" type="Control" parent="MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/SidechainPage/GridContainer"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/SidechainPage"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/SidechainPage/HBoxContainer"]
+layout_mode = 2
+
+[node name="PanelContainerSidechains" type="PanelContainer" parent="MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/SidechainPage/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_styles/panel = ExtResource("3_it7rq")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/SidechainPage/HBoxContainer/VBoxContainer/PanelContainerSidechains"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/SidechainPage/HBoxContainer/VBoxContainer/PanelContainerSidechains/VBoxContainer"]
+layout_mode = 2
+text = "Sidechains:"
+
+[node name="ItemListSidechains" type="ItemList" parent="MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/SidechainPage/HBoxContainer/VBoxContainer/PanelContainerSidechains/VBoxContainer"]
+custom_minimum_size = Vector2(400, 525)
+layout_mode = 2
+auto_height = true
+item_count = 4
+icon_scale = 0.02
+item_0/text = "Sidechain 0 : Testchain"
+item_0/icon = ExtResource("4_s21x0")
+item_1/text = "Sidechain 1 : Trainchain"
+item_1/icon = ExtResource("4_s21x0")
+item_2/text = "Sidechain 2 : Thunder"
+item_2/icon = ExtResource("4_s21x0")
+item_3/text = "Sidechain 3 : BitAssets"
+item_3/icon = ExtResource("4_s21x0")
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/SidechainPage/HBoxContainer"]
+layout_mode = 2
+
+[node name="PanelContainerDeposit" type="PanelContainer" parent="MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/SidechainPage/HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+theme_override_styles/panel = ExtResource("3_it7rq")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/SidechainPage/HBoxContainer/VBoxContainer2/PanelContainerDeposit"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/SidechainPage/HBoxContainer/VBoxContainer2/PanelContainerDeposit/VBoxContainer"]
+custom_minimum_size = Vector2(550, 0)
+layout_mode = 2
+text = "Your Recent Sidechain Deposits:"
+
+[node name="ItemList" type="ItemList" parent="MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/SidechainPage/HBoxContainer/VBoxContainer2/PanelContainerDeposit/VBoxContainer"]
+layout_mode = 2
+auto_height = true
+item_count = 2
+item_0/text = "Sidechain 0 : 21.00000000"
+item_1/text = "Sidechain 3 : 33.00000000"
+
+[node name="PanelContainerWithdrawals" type="PanelContainer" parent="MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/SidechainPage/HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+theme_override_styles/panel = ExtResource("3_it7rq")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/SidechainPage/HBoxContainer/VBoxContainer2/PanelContainerWithdrawals"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/SidechainPage/HBoxContainer/VBoxContainer2/PanelContainerWithdrawals/VBoxContainer"]
+layout_mode = 2
+text = "Sidechain Withdrawals:"
+
+[node name="ItemList" type="ItemList" parent="MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/SidechainPage/HBoxContainer/VBoxContainer2/PanelContainerWithdrawals/VBoxContainer"]
+layout_mode = 2
+auto_height = true
+item_count = 2
+item_0/text = "1/2016 ACKS Sidechain 0 : 57a23bc38e1c2a20aaeee8ce83afc7052652d1a3d93349d6968947bf59b56042 "
+item_1/text = "50/2016 ACKS Sidechain 2 : ce83afc7052652d1a3d93357a23bc38e1c2a20aaeee849d6968947bf59b56042 "
+
+[node name="SettingPage" type="Control" parent="MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages"]
+visible = false
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/SettingPage"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/SettingPage/VBoxContainer"]
+layout_mode = 2
+text = "Settings"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/SettingPage/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label2" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/SettingPage/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Bitcoin RPC Port:
+"
+
+[node name="SpinBox" type="SpinBox" parent="MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/SettingPage/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+max_value = 999999.0
+value = 8332.0
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/SettingPage/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label2" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/SettingPage/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+text = "Wallet RPC Port:
+"
+
+[node name="SpinBox" type="SpinBox" parent="MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/SettingPage/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/SettingPage/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label2" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/SettingPage/VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+text = "CUSF Client RPC Port:
+"
+
+[node name="SpinBox" type="SpinBox" parent="MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/SettingPage/VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(1140, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = ExtResource("3_it7rq")
+
+[node name="HBoxContainerBottomStatus" type="HBoxContainer" parent="MarginContainer/VBoxContainer/PanelContainer"]
+layout_mode = 2
+
+[node name="LabelNumBlocks" type="Label" parent="MarginContainer/VBoxContainer/PanelContainer/HBoxContainerBottomStatus"]
+layout_mode = 2
+text = "Blocks: 0"
+
+[node name="VSeparator" type="VSeparator" parent="MarginContainer/VBoxContainer/PanelContainer/HBoxContainerBottomStatus"]
+layout_mode = 2
+
+[node name="Label6" type="Label" parent="MarginContainer/VBoxContainer/PanelContainer/HBoxContainerBottomStatus"]
+layout_mode = 2
+text = "Last Block: ? minutes ago"
+
+[node name="VSeparator7" type="VSeparator" parent="MarginContainer/VBoxContainer/PanelContainer/HBoxContainerBottomStatus"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/PanelContainer/HBoxContainerBottomStatus"]
+layout_mode = 2
+text = "Peers: 0
+"
+
+[node name="VSeparator2" type="VSeparator" parent="MarginContainer/VBoxContainer/PanelContainer/HBoxContainerBottomStatus"]
+layout_mode = 2
+
+[node name="Label2" type="Label" parent="MarginContainer/VBoxContainer/PanelContainer/HBoxContainerBottomStatus"]
+layout_mode = 2
+text = "Mempool txns: 0"
+
+[node name="VSeparator4" type="VSeparator" parent="MarginContainer/VBoxContainer/PanelContainer/HBoxContainerBottomStatus"]
+layout_mode = 2
+
+[node name="Label3" type="Label" parent="MarginContainer/VBoxContainer/PanelContainer/HBoxContainerBottomStatus"]
+layout_mode = 2
+text = "Wallet: Not Connected"
+
+[node name="VSeparator3" type="VSeparator" parent="MarginContainer/VBoxContainer/PanelContainer/HBoxContainerBottomStatus"]
+layout_mode = 2
+
+[node name="Label4" type="Label" parent="MarginContainer/VBoxContainer/PanelContainer/HBoxContainerBottomStatus"]
+layout_mode = 2
+text = "Bitcoin: Not Connected"
+
+[node name="VSeparator5" type="VSeparator" parent="MarginContainer/VBoxContainer/PanelContainer/HBoxContainerBottomStatus"]
+layout_mode = 2
+
+[node name="Label5" type="Label" parent="MarginContainer/VBoxContainer/PanelContainer/HBoxContainerBottomStatus"]
+layout_mode = 2
+text = "CUSF Client: Not Connected"
 
 [connection signal="btc_new_block_count" from="Server" to="." method="_on_server_btc_new_block_count"]
+[connection signal="toggled" from="MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPageButtons/VBoxContainer/ButtonOverview" to="." method="_on_button_overview_toggled"]
+[connection signal="toggled" from="MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPageButtons/VBoxContainer/ButtonWallet" to="." method="_on_button_wallet_toggled"]
+[connection signal="toggled" from="MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPageButtons/VBoxContainer/ButtonSidechains" to="." method="_on_button_sidechains_toggled"]
+[connection signal="toggled" from="MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPageButtons/VBoxContainer/ButtonSettings" to="." method="_on_button_settings_toggled"]
