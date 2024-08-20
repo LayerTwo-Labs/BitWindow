@@ -1,8 +1,9 @@
-[gd_scene load_steps=10 format=3 uid="uid://ddrak8ln5u67w"]
+[gd_scene load_steps=11 format=3 uid="uid://ddrak8ln5u67w"]
 
 [ext_resource type="Script" path="res://script/main_window.gd" id="1_fxi36"]
 [ext_resource type="PackedScene" uid="uid://ce2mbwdltb3tc" path="res://scene/server.tscn" id="2_335kp"]
 [ext_resource type="StyleBox" uid="uid://do3pgd68vga3c" path="res://theme/background_flat_style_box.tres" id="3_it7rq"]
+[ext_resource type="StyleBox" uid="uid://rfjpq81ynq33" path="res://theme/overview_flat_style_box.tres" id="4_gja1u"]
 [ext_resource type="Texture2D" uid="uid://dddtuaqltlbg7" path="res://image/bitcoin.png" id="4_s21x0"]
 
 [sub_resource type="ButtonGroup" id="ButtonGroup_ifbhb"]
@@ -110,6 +111,7 @@ columns = 2
 
 [node name="PanelContainerBalances" type="PanelContainer" parent="MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/OverviewPage/GridContainer"]
 layout_mode = 2
+theme_override_styles/panel = ExtResource("4_gja1u")
 
 [node name="LabelBalances" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/OverviewPage/GridContainer/PanelContainerBalances"]
 layout_mode = 2
@@ -119,46 +121,67 @@ Sidechains: 0.00000000"
 
 [node name="PanelContainerNetworkStats" type="PanelContainer" parent="MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/OverviewPage/GridContainer"]
 layout_mode = 2
+theme_override_styles/panel = ExtResource("4_gja1u")
 
-[node name="LabelNodeInfo" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/OverviewPage/GridContainer/PanelContainerNetworkStats"]
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/OverviewPage/GridContainer/PanelContainerNetworkStats"]
 layout_mode = 2
-text = "Node & Network:
 
-Bitcoin Node: \"/Satoshi:27.1.0/\" 
-Services: \"NETWORK\",  \"WITNESS\", \"NETWORK_LIMITED\", \"P2P_V2\"
-bestblockhash: \"000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f\"
-Network hashrate: 0 h/s
-Blockchain size on disk: 600 GB
-Warnings: None
+[node name="LabelBitcoinVersion" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/OverviewPage/GridContainer/PanelContainerNetworkStats/VBoxContainer"]
+layout_mode = 2
+text = "Bitcoin Node: Not Connected"
 
-Wallet: ??? Unknown
-CUSF Client:  ??? Unknown
- 
-"
+[node name="LabelBitcoinServices" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/OverviewPage/GridContainer/PanelContainerNetworkStats/VBoxContainer"]
+layout_mode = 2
+text = "Services: Not Connected"
+
+[node name="LabelWalletVersion" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/OverviewPage/GridContainer/PanelContainerNetworkStats/VBoxContainer"]
+layout_mode = 2
+text = "Wallet:  Not Connected"
+
+[node name="LabelCUSFVersion" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/OverviewPage/GridContainer/PanelContainerNetworkStats/VBoxContainer"]
+layout_mode = 2
+text = "CUSF Client:  Not Connected"
+
+[node name="LabelBestBlock" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/OverviewPage/GridContainer/PanelContainerNetworkStats/VBoxContainer"]
+layout_mode = 2
+text = "Best Block:
+000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f"
+
+[node name="LabelChainSize" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/OverviewPage/GridContainer/PanelContainerNetworkStats/VBoxContainer"]
+layout_mode = 2
+text = "Blockchain size on disk: 0"
+
+[node name="LabelWarnings" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/OverviewPage/GridContainer/PanelContainerNetworkStats/VBoxContainer"]
+layout_mode = 2
+text = "Warnings: None"
 
 [node name="PanelContainerBlocks" type="PanelContainer" parent="MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/OverviewPage/GridContainer"]
 layout_mode = 2
+theme_override_styles/panel = ExtResource("4_gja1u")
 
 [node name="LabelBlocks" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/OverviewPage/GridContainer/PanelContainerBlocks"]
 layout_mode = 2
 text = "Bitcoin Blocks: 
-999,999
+0
 
 Last block time:
-000000000000"
+0"
 
 [node name="PanelContainerMempool" type="PanelContainer" parent="MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/OverviewPage/GridContainer"]
 layout_mode = 2
+theme_override_styles/panel = ExtResource("4_gja1u")
 
-[node name="LabelMempool" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/OverviewPage/GridContainer/PanelContainerMempool"]
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/OverviewPage/GridContainer/PanelContainerMempool"]
 layout_mode = 2
-text = "Mempool:
-Transactions: 0
-Size: 0 bytes
-Total fees : 0.00000000
- 
- 
+
+[node name="LabelMempoolSize" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/OverviewPage/GridContainer/PanelContainerMempool/VBoxContainer"]
+layout_mode = 2
+text = "Mempool Transactions: 0
 "
+
+[node name="LabelMempoolByteSize" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/OverviewPage/GridContainer/PanelContainerMempool/VBoxContainer"]
+layout_mode = 2
+text = "Size: 0 bytes"
 
 [node name="WalletPage" type="Control" parent="MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages"]
 visible = false
@@ -356,20 +379,10 @@ text = "Last Block: ? minutes ago"
 [node name="VSeparator7" type="VSeparator" parent="MarginContainer/VBoxContainer/PanelContainer/HBoxContainerBottomStatus"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/PanelContainer/HBoxContainerBottomStatus"]
+[node name="LabelPeers" type="Label" parent="MarginContainer/VBoxContainer/PanelContainer/HBoxContainerBottomStatus"]
 layout_mode = 2
 text = "Peers: 0
 "
-
-[node name="VSeparator2" type="VSeparator" parent="MarginContainer/VBoxContainer/PanelContainer/HBoxContainerBottomStatus"]
-layout_mode = 2
-
-[node name="Label2" type="Label" parent="MarginContainer/VBoxContainer/PanelContainer/HBoxContainerBottomStatus"]
-layout_mode = 2
-text = "Mempool txns: 0"
-
-[node name="VSeparator4" type="VSeparator" parent="MarginContainer/VBoxContainer/PanelContainer/HBoxContainerBottomStatus"]
-layout_mode = 2
 
 [node name="Label3" type="Label" parent="MarginContainer/VBoxContainer/PanelContainer/HBoxContainerBottomStatus"]
 layout_mode = 2
@@ -422,6 +435,9 @@ expand_mode = 3
 layout_mode = 2
 
 [connection signal="btc_new_block_count" from="Server" to="." method="_on_server_btc_new_block_count"]
+[connection signal="btc_new_blockchain_info" from="Server" to="." method="_on_server_btc_new_blockchain_info"]
+[connection signal="btc_new_mempool_info" from="Server" to="." method="_on_server_btc_new_mempool_info"]
+[connection signal="btc_new_network_info" from="Server" to="." method="_on_server_btc_new_network_info"]
 [connection signal="btc_rpc_failed" from="Server" to="." method="_on_server_btc_rpc_failed"]
 [connection signal="cusf_new_block_count" from="Server" to="." method="_on_server_cusf_new_block_count"]
 [connection signal="cusf_rpc_failed" from="Server" to="." method="_on_server_cusf_rpc_failed"]

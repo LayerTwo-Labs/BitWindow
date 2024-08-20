@@ -123,7 +123,7 @@ func _on_httprpcbtc_get_network_info_request_completed(_result: int, response_co
 		for service in res["result"]["localservicesnames"]:
 			services += str(service, " ")
 		
-		var peers : String = str(res["result"]["connections"])
+		var peers : int = res["result"]["connections"]
 		
 		btc_new_network_info.emit(subversion, services, peers)
 	else:

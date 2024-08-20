@@ -12,6 +12,8 @@ var timer_bitcoin_update = null
 var timer_wallet_update = null
 var timer_cusf_update = null
 
+var block_height : int = 0
+
 func _ready() -> void:
 	# For network code debugging, set the server node visible
 	$Server.visible = true
@@ -43,8 +45,42 @@ func _ready() -> void:
 
 func _on_server_btc_new_block_count(height: int) -> void:
 	connected_btc = true
-	$MarginContainer/VBoxContainer/PanelContainer/HBoxContainerBottomStatus/LabelNumBlocks.text = str("Blocks: ", height)
+	block_height = height
 	display_connection_status()
+	
+	
+func _on_server_btc_new_blockchain_info(bestblockhash: String, bytes: int, warnings: String, time: int) -> void:
+	$MarginContainer/VBoxContainer/PanelContainer/HBoxContainerBottomStatus/LabelNumBlocks.text = str("Blocks: ", block_height)
+	
+	var block_panel_text : String = str("Bitcoin Blocks:\n", block_height, "\nLast block time:\n", time)
+	$MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/OverviewPage/GridContainer/PanelContainerBlocks/LabelBlocks.text = block_panel_text
+
+	var best_block_text = str("Best Block:\n", bestblockhash)
+	$MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/OverviewPage/GridContainer/PanelContainerNetworkStats/VBoxContainer/LabelBestBlock.text = best_block_text
+
+	var chain_size_text = str("Blockchain size on disk: ", bytes, " Bytes")
+	$MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/OverviewPage/GridContainer/PanelContainerNetworkStats/VBoxContainer/LabelChainSize.text = chain_size_text
+
+	var warnings_text = str("Warnings: ", "None" if warnings.is_empty() else warnings)
+	$MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/OverviewPage/GridContainer/PanelContainerNetworkStats/VBoxContainer/LabelWarnings.text = warnings_text
+
+
+func _on_server_btc_new_mempool_info(size: int, bytesize: int) -> void:
+	var mempool_size_text = str("Mempool Transactions:\n", size)
+	var mempool_bytes_text = str("Mempool Size:\n", bytesize, " Bytes")
+	$MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/OverviewPage/GridContainer/PanelContainerMempool/VBoxContainer/LabelMempoolSize.text = mempool_size_text
+	$MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/OverviewPage/GridContainer/PanelContainerMempool/VBoxContainer/LabelMempoolByteSize.text = mempool_bytes_text
+	
+	
+func _on_server_btc_new_network_info(subversion: String, services: String, connections: int) -> void:
+	var version_text = str("Bitcoin Node: ", subversion)
+	$MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/OverviewPage/GridContainer/PanelContainerNetworkStats/VBoxContainer/LabelBitcoinVersion.text = version_text
+	
+	var service_text = str("Services: ", services)
+	$MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/OverviewPage/GridContainer/PanelContainerNetworkStats/VBoxContainer/LabelBitcoinServices.text = service_text
+	
+	var peers_text = str("Peers: ", connections)
+	$MarginContainer/VBoxContainer/PanelContainer/HBoxContainerBottomStatus/LabelPeers.text = peers_text
 
 
 func _on_server_cusf_new_block_count(_height: int) -> void:
