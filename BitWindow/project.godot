@@ -16,6 +16,11 @@ config/features=PackedStringArray("4.2", "Forward Plus")
 boot_splash/image="res://image/bitcoin.png"
 config/icon="res://image/bitcoin.png"
 
+[display]
+
+window/stretch/mode="canvas_items"
+window/stretch/aspect="ignore"
+
 [gui]
 
 theme/custom="res://theme/theme.tres"
