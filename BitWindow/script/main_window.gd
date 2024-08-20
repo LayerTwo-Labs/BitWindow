@@ -38,6 +38,7 @@ func _ready() -> void:
 	timer_cusf_update.start(CUSF_UPDATE_DELAY)
 	
 	call_deferred("display_connection_status")
+	call_deferred("load_user_settings")
 
 
 func _on_server_btc_new_block_count(height: int) -> void:
@@ -135,3 +136,38 @@ func update_wallet_data() -> void:
 
 func update_cusf_data() -> void:
 	$Server.rpc_cusf_getblockcount()
+
+
+#region Settings Page
+
+func load_user_settings() -> void:
+	$"/root/UserSettings".load_settings()
+	$MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/SettingPage/VBoxContainer/HBoxContainer4/LineEditRPCUser.text = $"/root/UserSettings".rpc_user
+	$MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/SettingPage/VBoxContainer/HBoxContainer4/LineEditRPCPass.text = $"/root/UserSettings".rpc_pass
+
+	$MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/SettingPage/VBoxContainer/HBoxContainer/SpinBoxBitcoinRPCPort.value = $"/root/UserSettings".rpc_port_bitcoin
+	$MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/SettingPage/VBoxContainer/HBoxContainer2/SpinBoxWalletRPCPort.value = $"/root/UserSettings".rpc_port_wallet
+	$MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/SettingPage/VBoxContainer/HBoxContainer3/SpinBoxCUSFPort.value = $"/root/UserSettings".rpc_port_cusf
+
+
+func _on_line_edit_rpc_user_text_changed(new_text: String) -> void:
+	$"/root/UserSettings".rpc_user = new_text
+	$"/root/UserSettings".save_settings()
+
+func _on_line_edit_rpc_pass_text_changed(new_text: String) -> void:
+	$"/root/UserSettings".rpc_pass = new_text
+	$"/root/UserSettings".save_settings()
+
+func _on_spin_box_bitcoin_rpc_port_value_changed(value: float) -> void:
+	$"/root/UserSettings".rpc_port_bitcoin = value
+	$"/root/UserSettings".save_settings()
+
+func _on_spin_box_wallet_rpc_port_value_changed(value: float) -> void:
+	$"/root/UserSettings".rpc_port_wallet = value
+	$"/root/UserSettings".save_settings()
+
+func _on_spin_box_cusf_port_value_changed(value: float) -> void:
+	$"/root/UserSettings".rpc_port_cusf = value
+	$"/root/UserSettings".save_settings()
+	
+#endregion

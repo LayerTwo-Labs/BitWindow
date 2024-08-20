@@ -1,12 +1,5 @@
 extends Control
 
-const RPC_USER : String = "abc"
-const RPC_PASS : String = "def"
-
-const BITCOIN_RPC_PORT : int = 8332
-const WALLET_RPC_PORT : int = -1 # TODO currently unknown
-const CUSF_RPC_PORT : int = -1   # TODO currently unknown
-
 # Bitcoin RPC requests 
 @onready var http_rpc_btc_get_block_count: HTTPRequest = $RPCRequests/HTTPRPCBTCGetBlockCount
 @onready var http_rpc_btc_get_network_info: HTTPRequest = $RPCRequests/HTTPRPCBTCGetNetworkInfo
@@ -43,7 +36,7 @@ func _on_button_test_connection_bitcoin_pressed() -> void:
 
 
 func make_rpc_request(port : int, method: String, params: Variant, http_request: HTTPRequest) -> void:
-	var auth = str(RPC_USER, ":", RPC_PASS)
+	var auth = str($"/root/UserSettings".rpc_user, ":", $"/root/UserSettings".rpc_pass)
 	var auth_bytes = auth.to_utf8_buffer()
 	var auth_encoded = Marshalls.raw_to_base64(auth_bytes)
 	var headers: PackedStringArray = []
@@ -73,27 +66,27 @@ func parse_rpc_result(response_code, body) -> Dictionary:
 
 
 func rpc_bitcoin_getblockcount() -> void:
-	make_rpc_request(BITCOIN_RPC_PORT, "getblockcount", [], http_rpc_btc_get_block_count)
+	make_rpc_request($"/root/UserSettings".rpc_port_bitcoin, "getblockcount", [], http_rpc_btc_get_block_count)
 
 
 func rpc_bitcoin_getnetworkinfo() -> void:
-	make_rpc_request(BITCOIN_RPC_PORT, "getnetworkinfo", [], http_rpc_btc_get_network_info)
+	make_rpc_request($"/root/UserSettings".rpc_port_bitcoin, "getnetworkinfo", [], http_rpc_btc_get_network_info)
 
 
 func rpc_bitcoin_getmempoolinfo() -> void:
-	make_rpc_request(BITCOIN_RPC_PORT, "getmempoolinfo", [], http_rpc_btc_get_mempool_info)
+	make_rpc_request($"/root/UserSettings".rpc_port_bitcoin, "getmempoolinfo", [], http_rpc_btc_get_mempool_info)
 
 
 func rpc_bitcoin_getblockchaininfo() -> void:
-	make_rpc_request(BITCOIN_RPC_PORT, "getblockchaininfo", [], http_rpc_btc_get_blockchain_info)
+	make_rpc_request($"/root/UserSettings".rpc_port_bitcoin, "getblockchaininfo", [], http_rpc_btc_get_blockchain_info)
 
 
 func rpc_wallet_getbalance() -> void:
-	make_rpc_request(WALLET_RPC_PORT, "getbalance", [], http_rpc_wallet_get_balance)
+	make_rpc_request($"/root/UserSettings".rpc_port_wallet, "getbalance", [], http_rpc_wallet_get_balance)
 	
 	
 func rpc_cusf_getblockcount() -> void:
-	make_rpc_request(CUSF_RPC_PORT, "getblockcount", [], http_rpc_cusf_get_block_count)
+	make_rpc_request($"/root/UserSettings".rpc_port_cusf, "getblockcount", [], http_rpc_cusf_get_block_count)
 
 
 func _on_httprpcbtc_get_block_count_request_completed(_result: int, response_code: int, _headers: PackedStringArray, body: PackedByteArray) -> void:

@@ -16,6 +16,10 @@ config/features=PackedStringArray("4.2", "Forward Plus")
 boot_splash/image="res://image/bitcoin.png"
 config/icon="res://image/bitcoin.png"
 
+[autoload]
+
+UserSettings="*res://user_settings.gd"
+
 [display]
 
 window/stretch/mode="canvas_items"

@@ -272,6 +272,28 @@ offset_bottom = 40.0
 layout_mode = 2
 text = "Settings"
 
+[node name="HBoxContainer4" type="HBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/SettingPage/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/SettingPage/VBoxContainer/HBoxContainer4"]
+layout_mode = 2
+text = "RPC Username: "
+
+[node name="LineEditRPCUser" type="LineEdit" parent="MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/SettingPage/VBoxContainer/HBoxContainer4"]
+custom_minimum_size = Vector2(250, 0)
+layout_mode = 2
+placeholder_text = "Enter RPC Username"
+
+[node name="Label2" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/SettingPage/VBoxContainer/HBoxContainer4"]
+layout_mode = 2
+text = "RPC Password: "
+
+[node name="LineEditRPCPass" type="LineEdit" parent="MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/SettingPage/VBoxContainer/HBoxContainer4"]
+custom_minimum_size = Vector2(250, 0)
+layout_mode = 2
+placeholder_text = "Enter RPC Password"
+secret = true
+
 [node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/SettingPage/VBoxContainer"]
 layout_mode = 2
 
@@ -280,7 +302,7 @@ layout_mode = 2
 text = "Bitcoin RPC Port:
 "
 
-[node name="SpinBox" type="SpinBox" parent="MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/SettingPage/VBoxContainer/HBoxContainer"]
+[node name="SpinBoxBitcoinRPCPort" type="SpinBox" parent="MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/SettingPage/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 max_value = 999999.0
 value = 8332.0
@@ -293,8 +315,9 @@ layout_mode = 2
 text = "Wallet RPC Port:
 "
 
-[node name="SpinBox" type="SpinBox" parent="MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/SettingPage/VBoxContainer/HBoxContainer2"]
+[node name="SpinBoxWalletRPCPort" type="SpinBox" parent="MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/SettingPage/VBoxContainer/HBoxContainer2"]
 layout_mode = 2
+max_value = 999999.0
 
 [node name="HBoxContainer3" type="HBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/SettingPage/VBoxContainer"]
 layout_mode = 2
@@ -304,8 +327,9 @@ layout_mode = 2
 text = "CUSF Client RPC Port:
 "
 
-[node name="SpinBox" type="SpinBox" parent="MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/SettingPage/VBoxContainer/HBoxContainer3"]
+[node name="SpinBoxCUSFPort" type="SpinBox" parent="MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/SettingPage/VBoxContainer/HBoxContainer3"]
 layout_mode = 2
+max_value = 999999.0
 
 [node name="PanelContainer" type="PanelContainer" parent="MarginContainer/VBoxContainer"]
 custom_minimum_size = Vector2(1140, 0)
@@ -407,3 +431,8 @@ layout_mode = 2
 [connection signal="toggled" from="MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPageButtons/VBoxContainer/ButtonWallet" to="." method="_on_button_wallet_toggled"]
 [connection signal="toggled" from="MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPageButtons/VBoxContainer/ButtonSidechains" to="." method="_on_button_sidechains_toggled"]
 [connection signal="toggled" from="MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPageButtons/VBoxContainer/ButtonSettings" to="." method="_on_button_settings_toggled"]
+[connection signal="text_changed" from="MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/SettingPage/VBoxContainer/HBoxContainer4/LineEditRPCUser" to="." method="_on_line_edit_rpc_user_text_changed"]
+[connection signal="text_changed" from="MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/SettingPage/VBoxContainer/HBoxContainer4/LineEditRPCPass" to="." method="_on_line_edit_rpc_pass_text_changed"]
+[connection signal="value_changed" from="MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/SettingPage/VBoxContainer/HBoxContainer/SpinBoxBitcoinRPCPort" to="." method="_on_spin_box_bitcoin_rpc_port_value_changed"]
+[connection signal="value_changed" from="MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/SettingPage/VBoxContainer/HBoxContainer2/SpinBoxWalletRPCPort" to="." method="_on_spin_box_wallet_rpc_port_value_changed"]
+[connection signal="value_changed" from="MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/SettingPage/VBoxContainer/HBoxContainer3/SpinBoxCUSFPort" to="." method="_on_spin_box_cusf_port_value_changed"]
