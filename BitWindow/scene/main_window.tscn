@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://ddrak8ln5u67w"]
+[gd_scene load_steps=10 format=3 uid="uid://ddrak8ln5u67w"]
 
 [ext_resource type="Script" path="res://script/main_window.gd" id="1_fxi36"]
 [ext_resource type="PackedScene" uid="uid://ce2mbwdltb3tc" path="res://scene/server.tscn" id="2_335kp"]
@@ -6,6 +6,28 @@
 [ext_resource type="Texture2D" uid="uid://dddtuaqltlbg7" path="res://image/bitcoin.png" id="4_s21x0"]
 
 [sub_resource type="ButtonGroup" id="ButtonGroup_ifbhb"]
+
+[sub_resource type="Gradient" id="Gradient_y0kg2"]
+offsets = PackedFloat32Array(0.199234, 0.726054)
+colors = PackedColorArray(1, 0, 0, 1, 0, 0, 0, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_0oifk"]
+gradient = SubResource("Gradient_y0kg2")
+width = 16
+height = 16
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+
+[sub_resource type="Gradient" id="Gradient_i28mx"]
+offsets = PackedFloat32Array(0.199234, 0.726054)
+colors = PackedColorArray(0.285298, 0.629639, 7.70092e-07, 1, 0, 0, 0, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_3y21c"]
+gradient = SubResource("Gradient_i28mx")
+width = 16
+height = 16
+fill = 1
+fill_from = Vector2(0.5, 0.5)
 
 [node name="MainWindow" type="Control"]
 layout_mode = 3
@@ -296,6 +318,8 @@ layout_mode = 2
 
 [node name="LabelNumBlocks" type="Label" parent="MarginContainer/VBoxContainer/PanelContainer/HBoxContainerBottomStatus"]
 layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.0
 text = "Blocks: 0"
 
 [node name="VSeparator" type="VSeparator" parent="MarginContainer/VBoxContainer/PanelContainer/HBoxContainerBottomStatus"]
@@ -325,23 +349,60 @@ layout_mode = 2
 
 [node name="Label3" type="Label" parent="MarginContainer/VBoxContainer/PanelContainer/HBoxContainerBottomStatus"]
 layout_mode = 2
-text = "Wallet: Not Connected"
+size_flags_horizontal = 3
+text = "Connections: Bitcoin:"
+horizontal_alignment = 2
 
-[node name="VSeparator3" type="VSeparator" parent="MarginContainer/VBoxContainer/PanelContainer/HBoxContainerBottomStatus"]
+[node name="TextureRectBitcoinNotConnected" type="TextureRect" parent="MarginContainer/VBoxContainer/PanelContainer/HBoxContainerBottomStatus"]
 layout_mode = 2
+texture = SubResource("GradientTexture2D_0oifk")
+expand_mode = 3
 
-[node name="Label4" type="Label" parent="MarginContainer/VBoxContainer/PanelContainer/HBoxContainerBottomStatus"]
+[node name="TextureRectBitcoinConnected" type="TextureRect" parent="MarginContainer/VBoxContainer/PanelContainer/HBoxContainerBottomStatus"]
+visible = false
 layout_mode = 2
-text = "Bitcoin: Not Connected"
-
-[node name="VSeparator5" type="VSeparator" parent="MarginContainer/VBoxContainer/PanelContainer/HBoxContainerBottomStatus"]
-layout_mode = 2
+texture = SubResource("GradientTexture2D_3y21c")
+expand_mode = 3
 
 [node name="Label5" type="Label" parent="MarginContainer/VBoxContainer/PanelContainer/HBoxContainerBottomStatus"]
 layout_mode = 2
-text = "CUSF Client: Not Connected"
+text = "CUSF Client:"
+
+[node name="TextureRectCUSFNotConnected" type="TextureRect" parent="MarginContainer/VBoxContainer/PanelContainer/HBoxContainerBottomStatus"]
+layout_mode = 2
+texture = SubResource("GradientTexture2D_0oifk")
+expand_mode = 3
+
+[node name="TextureRectCUSFConnected" type="TextureRect" parent="MarginContainer/VBoxContainer/PanelContainer/HBoxContainerBottomStatus"]
+visible = false
+layout_mode = 2
+texture = SubResource("GradientTexture2D_3y21c")
+expand_mode = 3
+
+[node name="Label4" type="Label" parent="MarginContainer/VBoxContainer/PanelContainer/HBoxContainerBottomStatus"]
+layout_mode = 2
+text = "Wallet:"
+
+[node name="TextureRectWalletNotConnected" type="TextureRect" parent="MarginContainer/VBoxContainer/PanelContainer/HBoxContainerBottomStatus"]
+layout_mode = 2
+texture = SubResource("GradientTexture2D_0oifk")
+expand_mode = 3
+
+[node name="TextureRectWalletConnected" type="TextureRect" parent="MarginContainer/VBoxContainer/PanelContainer/HBoxContainerBottomStatus"]
+visible = false
+layout_mode = 2
+texture = SubResource("GradientTexture2D_3y21c")
+expand_mode = 3
+
+[node name="ConnectionLights" type="Control" parent="MarginContainer/VBoxContainer/PanelContainer/HBoxContainerBottomStatus"]
+layout_mode = 2
 
 [connection signal="btc_new_block_count" from="Server" to="." method="_on_server_btc_new_block_count"]
+[connection signal="btc_rpc_failed" from="Server" to="." method="_on_server_btc_rpc_failed"]
+[connection signal="cusf_new_block_count" from="Server" to="." method="_on_server_cusf_new_block_count"]
+[connection signal="cusf_rpc_failed" from="Server" to="." method="_on_server_cusf_rpc_failed"]
+[connection signal="wallet_rpc_failed" from="Server" to="." method="_on_server_wallet_rpc_failed"]
+[connection signal="wallet_updated" from="Server" to="." method="_on_server_wallet_updated"]
 [connection signal="toggled" from="MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPageButtons/VBoxContainer/ButtonOverview" to="." method="_on_button_overview_toggled"]
 [connection signal="toggled" from="MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPageButtons/VBoxContainer/ButtonWallet" to="." method="_on_button_wallet_toggled"]
 [connection signal="toggled" from="MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPageButtons/VBoxContainer/ButtonSidechains" to="." method="_on_button_sidechains_toggled"]
