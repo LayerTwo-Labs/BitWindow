@@ -31,11 +31,20 @@ text = "Test Bitcoin connection"
 
 [node name="HTTPRPCBTCGetBlockCount" type="HTTPRequest" parent="RPCRequests"]
 
+[node name="HTTPRPCBTCGetMempoolInfo" type="HTTPRequest" parent="RPCRequests"]
+
+[node name="HTTPRPCBTCGetBlockchainInfo" type="HTTPRequest" parent="RPCRequests"]
+
+[node name="HTTPRPCBTCGetNetworkInfo" type="HTTPRequest" parent="RPCRequests"]
+
 [node name="HTTPRPCWalletGetBalance" type="HTTPRequest" parent="RPCRequests"]
 
 [node name="HTTPRPCCUSFGetBlockCount" type="HTTPRequest" parent="RPCRequests"]
 
 [connection signal="pressed" from="ButtonTestConnectionBitcoin" to="." method="_on_button_test_connection_bitcoin_pressed"]
 [connection signal="request_completed" from="RPCRequests/HTTPRPCBTCGetBlockCount" to="." method="_on_httprpcbtc_get_block_count_request_completed"]
+[connection signal="request_completed" from="RPCRequests/HTTPRPCBTCGetMempoolInfo" to="." method="_on_http_rpc_btc_get_mempool_info_request_completed"]
+[connection signal="request_completed" from="RPCRequests/HTTPRPCBTCGetBlockchainInfo" to="." method="_on_http_rpc_btc_get_blockchain_info_request_completed"]
+[connection signal="request_completed" from="RPCRequests/HTTPRPCBTCGetNetworkInfo" to="." method="_on_httprpcbtc_get_network_info_request_completed"]
 [connection signal="request_completed" from="RPCRequests/HTTPRPCWalletGetBalance" to="." method="_on_httprpc_wallet_get_balance_request_completed"]
 [connection signal="request_completed" from="RPCRequests/HTTPRPCCUSFGetBlockCount" to="." method="_on_httprpccusf_get_block_count_request_completed"]

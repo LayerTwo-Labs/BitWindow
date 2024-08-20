@@ -7,13 +7,27 @@ const BITCOIN_RPC_PORT : int = 8332
 const WALLET_RPC_PORT : int = -1 # TODO currently unknown
 const CUSF_RPC_PORT : int = -1   # TODO currently unknown
 
+# Bitcoin RPC requests 
 @onready var http_rpc_btc_get_block_count: HTTPRequest = $RPCRequests/HTTPRPCBTCGetBlockCount
+@onready var http_rpc_btc_get_network_info: HTTPRequest = $RPCRequests/HTTPRPCBTCGetNetworkInfo
+@onready var http_rpc_btc_get_mempool_info: HTTPRequest = $RPCRequests/HTTPRPCBTCGetMempoolInfo
+@onready var http_rpc_btc_get_blockchain_info: HTTPRequest = $RPCRequests/HTTPRPCBTCGetBlockchainInfo
+
+# Wallet RPC Requests
 @onready var http_rpc_wallet_get_balance: HTTPRequest = $RPCRequests/HTTPRPCWalletGetBalance
+
+# CUSF Client RPC Requests
 @onready var http_rpc_cusf_get_block_count: HTTPRequest = $RPCRequests/HTTPRPCCUSFGetBlockCount
+
 
 # Signals that should be emitted regularly if connections are working
 signal btc_new_block_count(height : int)
+signal btc_new_network_info(subversion : String, services : String, connections : int)
+signal btc_new_mempool_info(size : int, bytesize : int)
+signal btc_new_blockchain_info(bestblockhash : String, bytes : int, warnings : String, time : int)
+
 signal wallet_updated(btc_balance : int)
+
 signal cusf_new_block_count(height : int)
 
 # Signals that indicate connection failure to one of the backend softwares 
@@ -49,7 +63,7 @@ func parse_rpc_result(response_code, body) -> Dictionary:
 		if body != null:
 			var err = json.parse(body.get_string_from_utf8())
 			if err == OK:
-				print(json.get_data())
+				printerr(json.get_data())
 	else:
 		var err = json.parse(body.get_string_from_utf8())
 		if err == OK:
@@ -62,6 +76,18 @@ func rpc_bitcoin_getblockcount() -> void:
 	make_rpc_request(BITCOIN_RPC_PORT, "getblockcount", [], http_rpc_btc_get_block_count)
 
 
+func rpc_bitcoin_getnetworkinfo() -> void:
+	make_rpc_request(BITCOIN_RPC_PORT, "getnetworkinfo", [], http_rpc_btc_get_network_info)
+
+
+func rpc_bitcoin_getmempoolinfo() -> void:
+	make_rpc_request(BITCOIN_RPC_PORT, "getmempoolinfo", [], http_rpc_btc_get_mempool_info)
+
+
+func rpc_bitcoin_getblockchaininfo() -> void:
+	make_rpc_request(BITCOIN_RPC_PORT, "getblockchaininfo", [], http_rpc_btc_get_blockchain_info)
+
+
 func rpc_wallet_getbalance() -> void:
 	make_rpc_request(WALLET_RPC_PORT, "getbalance", [], http_rpc_wallet_get_balance)
 	
@@ -70,11 +96,11 @@ func rpc_cusf_getblockcount() -> void:
 	make_rpc_request(CUSF_RPC_PORT, "getblockcount", [], http_rpc_cusf_get_block_count)
 
 
-func _on_httprpcbtc_get_block_count_request_completed(result: int, response_code: int, _headers: PackedStringArray, body: PackedByteArray) -> void:
+func _on_httprpcbtc_get_block_count_request_completed(_result: int, response_code: int, _headers: PackedStringArray, body: PackedByteArray) -> void:
 	var res = parse_rpc_result(response_code, body)
 	var height : int = 0
 	if res.has("result"):
-		print_debug("Result: ", res.result)
+		#print_debug("Result: ", res.result)
 		height = res.result
 		btc_new_block_count.emit(height)
 	else:
@@ -82,11 +108,93 @@ func _on_httprpcbtc_get_block_count_request_completed(result: int, response_code
 		btc_rpc_failed.emit()
 
 
-func _on_httprpc_wallet_get_balance_request_completed(result: int, response_code: int, _headers: PackedStringArray, body: PackedByteArray) -> void:
+func _on_httprpcbtc_get_network_info_request_completed(_result: int, response_code: int, _headers: PackedStringArray, body: PackedByteArray) -> void:
+	var res = parse_rpc_result(response_code, body)
+	if res.has("result"):
+		#print_debug("Result: ", res.result)
+		if not res["result"].has("subversion"):
+			btc_rpc_failed.emit()
+			return
+			
+		if not res["result"].has("localservicesnames"):
+			btc_rpc_failed.emit()
+			return
+			
+		if not res["result"].has("connections"):
+			btc_rpc_failed.emit()
+			return
+			
+		var subversion : String = res["result"]["subversion"]
+		
+		var services : String = ""
+		for service in res["result"]["localservicesnames"]:
+			services += str(service, " ")
+		
+		var peers : String = str(res["result"]["connections"])
+		
+		btc_new_network_info.emit(subversion, services, peers)
+	else:
+		print_debug("result error")
+		btc_rpc_failed.emit()
+		
+		
+func _on_http_rpc_btc_get_mempool_info_request_completed(_result: int, response_code: int, _headers: PackedStringArray, body: PackedByteArray) -> void:
+	var res = parse_rpc_result(response_code, body)
+	if res.has("result"):
+		#print_debug("Result: ", res.result)
+		if not res["result"].has("size"):
+			btc_rpc_failed.emit()
+			return
+			
+		if not res["result"].has("bytes"):
+			btc_rpc_failed.emit()
+			return
+			
+		var mempool_size : int = res["result"]["size"]
+		var mempool_bytes : int = res["result"]["bytes"]
+		
+		btc_new_mempool_info.emit(mempool_size, mempool_bytes)
+	else:
+		print_debug("result error")
+		btc_rpc_failed.emit()
+
+
+func _on_http_rpc_btc_get_blockchain_info_request_completed(_result: int, response_code: int, _headers: PackedStringArray, body: PackedByteArray) -> void:
+	var res = parse_rpc_result(response_code, body)
+	if res.has("result"):
+		#print_debug("Result: ", res.result)
+		if not res["result"].has("bestblockhash"):
+			btc_rpc_failed.emit()
+			return
+		
+		if not res["result"].has("size_on_disk"):
+			btc_rpc_failed.emit()
+			return
+			
+		if not res["result"].has("warnings"):
+			btc_rpc_failed.emit()
+			return
+			
+		if not res["result"].has("time"):
+			btc_rpc_failed.emit()
+			return
+			
+		var blockchain_best_hash : String = res["result"]["bestblockhash"]
+		var blockchain_disk_bytes : int = res["result"]["size_on_disk"]
+		var blockchain_warnings : String = res["result"]["warnings"]
+		var blockchain_time : int = res["result"]["time"]
+		
+		btc_new_blockchain_info.emit(blockchain_best_hash, blockchain_disk_bytes, blockchain_warnings, blockchain_time)
+	else:
+		print_debug("result error")
+		btc_rpc_failed.emit()
+
+
+func _on_httprpc_wallet_get_balance_request_completed(_result: int, response_code: int, _headers: PackedStringArray, body: PackedByteArray) -> void:
 	var res = parse_rpc_result(response_code, body)
 	var balance : int = 0
 	if res.has("result"):
-		print_debug("Result: ", res.result)
+		#print_debug("Result: ", res.result)
 		balance = res.result
 		wallet_updated.emit(balance)
 	else:
@@ -94,13 +202,14 @@ func _on_httprpc_wallet_get_balance_request_completed(result: int, response_code
 		wallet_rpc_failed.emit()
 
 
-func _on_httprpccusf_get_block_count_request_completed(result: int, response_code: int, _headers: PackedStringArray, body: PackedByteArray) -> void:
+func _on_httprpccusf_get_block_count_request_completed(_result: int, response_code: int, _headers: PackedStringArray, body: PackedByteArray) -> void:
 	var res = parse_rpc_result(response_code, body)
 	var height : int = 0
 	if res.has("result"):
-		print_debug("Result: ", res.result)
+		#print_debug("Result: ", res.result)
 		height = res.result
 		cusf_new_block_count.emit(height)
 	else:
 		print_debug("result error")
 		cusf_rpc_failed.emit()
+

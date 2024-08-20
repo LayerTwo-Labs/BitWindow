@@ -1,8 +1,8 @@
 extends Control
 
-const BITCOIN_UPDATE_DELAY : int = 10
-const WALLET_UPDATE_DELAY : int = 10
-const CUSF_UPDATE_DELAY : int = 10
+const BITCOIN_UPDATE_DELAY : int = 5
+const WALLET_UPDATE_DELAY : int = 5
+const CUSF_UPDATE_DELAY : int = 5
 
 var connected_btc : bool = false
 var connected_wallet : bool = false
@@ -36,7 +36,6 @@ func _ready() -> void:
 	timer_cusf_update.connect("timeout", update_cusf_data)
 	
 	timer_cusf_update.start(CUSF_UPDATE_DELAY)
-	
 	
 	call_deferred("display_connection_status")
 
@@ -125,6 +124,9 @@ func display_connection_status() -> void:
 
 func update_bitcoin_data() -> void:
 	$Server.rpc_bitcoin_getblockcount()
+	$Server.rpc_bitcoin_getnetworkinfo()
+	$Server.rpc_bitcoin_getmempoolinfo()
+	$Server.rpc_bitcoin_getblockchaininfo()
 
 
 func update_wallet_data() -> void:
