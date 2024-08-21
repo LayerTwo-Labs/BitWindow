@@ -1,8 +1,8 @@
 extends Control
 
-const BITCOIN_UPDATE_DELAY : int = 5
-const WALLET_UPDATE_DELAY : int = 5
-const CUSF_UPDATE_DELAY : int = 5
+const BITCOIN_UPDATE_DELAY : int = 1
+const WALLET_UPDATE_DELAY : int = 1
+const CUSF_UPDATE_DELAY : int = 1
 
 var connected_btc : bool = false
 var connected_wallet : bool = false
@@ -53,7 +53,7 @@ func _on_server_btc_new_blockchain_info(bestblockhash: String, bytes: int, warni
 	$MarginContainer/VBoxContainer/PanelContainer/HBoxContainerBottomStatus/LabelNumBlocks.text = str("Blocks: ", block_height)
 	
 	var block_panel_text : String = str("Bitcoin Blocks:\n", block_height, "\nLast block time:\n", time)
-	$MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/OverviewPage/GridContainer/PanelContainerBlocks/LabelBlocks.text = block_panel_text
+	$MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/OverviewPage/GridContainer/PanelContainerBlocks/VBoxContainer/LabelBlocks.text = block_panel_text
 
 	var best_block_text = str("Best Block:\n", bestblockhash)
 	$MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/OverviewPage/GridContainer/PanelContainerNetworkStats/VBoxContainer/LabelBestBlock.text = best_block_text
@@ -127,6 +127,13 @@ func _on_button_sidechains_toggled(toggled_on: bool) -> void:
 		$MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/SidechainPage.visible = true
 	else:
 		$MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/SidechainPage.visible = false
+
+
+func _on_button_cusf_toggled(toggled_on: bool) -> void:
+	if toggled_on:
+		$MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/CUSFPage.visible = true
+	else:
+		$MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/CUSFPage.visible = false
 
 
 func _on_button_settings_toggled(toggled_on: bool) -> void:
@@ -206,4 +213,54 @@ func _on_spin_box_cusf_port_value_changed(value: float) -> void:
 	$"/root/UserSettings".rpc_port_cusf = value
 	$"/root/UserSettings".save_settings()
 	
+#endregion
+
+
+#region Sidechain Page
+
+func _on_button_propose_sidechain_pressed() -> void:
+	$MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/SidechainPage/SidechainOverview.visible = false
+	$MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/SidechainPage/SidechainProposal.visible = true
+
+
+func _on_button_sidechain_proposal_go_back_pressed() -> void:
+	$MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/SidechainPage/SidechainOverview.visible = true
+	$MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/SidechainPage/SidechainProposal.visible = false
+
+
+func _on_button_sidechain_details_go_back_pressed() -> void:
+	$MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/SidechainPage/SidechainOverview.visible = true
+	$MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/SidechainPage/SidechainDetails.visible = false
+
+
+func _on_button_withdrawal_settings_go_back_pressed() -> void:
+	$MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/SidechainPage/SidechainOverview.visible = true
+	$MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/SidechainPage/SidechainWithdrawalSettings.visible = false
+
+
+func _on_button_sidechain_activation_go_back_pressed() -> void:
+	$MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/SidechainPage/SidechainOverview.visible = true
+	$MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/SidechainPage/SidechainActivationSettings.visible = false
+
+
+func _on_item_list_sidechains_item_activated(index: int) -> void:
+	$MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/SidechainPage/SidechainOverview.visible = false
+	$MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/SidechainPage/SidechainDetails.visible = true
+
+
+func _on_button_set_proposal_votes_pressed() -> void:
+	$MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/SidechainPage/SidechainOverview.visible = false
+	$MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/SidechainPage/SidechainActivationSettings.visible = true
+
+
+func _on_button_set_withdrawal_votes_pressed() -> void:
+	$MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/SidechainPage/SidechainOverview.visible = false
+	$MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/SidechainPage/SidechainWithdrawalSettings.visible = true
+
+
+func _on_button_create_sidechain_proposal_pressed() -> void:
+	# TODO confirm
+	pass # Replace with function body.
+
+
 #endregion
