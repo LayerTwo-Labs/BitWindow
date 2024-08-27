@@ -9,8 +9,12 @@ extends Control
 # Wallet RPC Requests
 @onready var http_rpc_wallet_get_balance: HTTPRequest = $RPCRequests/HTTPRPCWalletGetBalance
 
-# CUSF Client RPC Requests
-@onready var http_rpc_cusf_get_block_count: HTTPRequest = $RPCRequests/HTTPRPCCUSFGetBlockCount
+# OP_CAT CUSF Client RPC Requests
+@onready var httprpccusfcat_get_block_count: HTTPRequest = $RPCRequests/HTTPRPCCUSFCATGetBlockCount
+
+# Drivechain CUSF client RPC Requests
+@onready var http_rpc_cusf_cat_get_block_count: HTTPRequest = $RPCRequests/HTTPRPCCUSFCATGetBlockCount
+@onready var http_rpc_cusf_drivechain_get_block_count: HTTPRequest = $RPCRequests/HTTPRPCCUSFDRIVECHAINGetBlockCount
 
 
 # Signals that should be emitted regularly if connections are working
@@ -21,17 +25,20 @@ signal btc_new_blockchain_info(bestblockhash : String, bytes : int, warnings : S
 
 signal wallet_updated(btc_balance : int)
 
-signal cusf_new_block_count(height : int)
+signal cusf_cat_new_block_count(height : int)
+signal cusf_drivechain_new_block_count(height : int)
 
 # Signals that indicate connection failure to one of the backend softwares 
 signal btc_rpc_failed()
 signal wallet_rpc_failed()
-signal cusf_rpc_failed()
+signal cusf_cat_rpc_failed()
+signal cusf_drivechain_rpc_failed()
 
 
 func _on_button_test_connection_bitcoin_pressed() -> void:
 	rpc_bitcoin_getblockcount()
-	rpc_cusf_getblockcount()
+	rpc_cusf_cat_getblockcount()
+	rpc_cusf_drivechain_getblockcount()
 	rpc_wallet_getbalance()
 
 
@@ -85,8 +92,12 @@ func rpc_wallet_getbalance() -> void:
 	make_rpc_request($"/root/UserSettings".rpc_port_wallet, "getbalance", [], http_rpc_wallet_get_balance)
 	
 	
-func rpc_cusf_getblockcount() -> void:
-	make_rpc_request($"/root/UserSettings".rpc_port_cusf, "getblockcount", [], http_rpc_cusf_get_block_count)
+func rpc_cusf_cat_getblockcount() -> void:
+	make_rpc_request($"/root/UserSettings".rpc_port_cusf_cat, "getblockcount", [], http_rpc_cusf_cat_get_block_count)
+
+
+func rpc_cusf_drivechain_getblockcount() -> void:
+	make_rpc_request($"/root/UserSettings".rpc_port_cusf_drivechain, "getblockcount", [], http_rpc_cusf_drivechain_get_block_count)
 
 
 func _on_httprpcbtc_get_block_count_request_completed(_result: int, response_code: int, _headers: PackedStringArray, body: PackedByteArray) -> void:
@@ -195,14 +206,25 @@ func _on_httprpc_wallet_get_balance_request_completed(_result: int, response_cod
 		wallet_rpc_failed.emit()
 
 
-func _on_httprpccusf_get_block_count_request_completed(_result: int, response_code: int, _headers: PackedStringArray, body: PackedByteArray) -> void:
+func _on_http_rpc_cusf_cat_get_block_count_request_completed(result: int, response_code: int, _headers: PackedStringArray, body: PackedByteArray) -> void:
 	var res = parse_rpc_result(response_code, body)
 	var height : int = 0
 	if res.has("result"):
 		#print_debug("Result: ", res.result)
 		height = res.result
-		cusf_new_block_count.emit(height)
+		cusf_cat_new_block_count.emit(height)
 	else:
 		print_debug("result error")
-		cusf_rpc_failed.emit()
+		cusf_cat_rpc_failed.emit()
 
+
+func _on_http_rpc_cusf_drivechain_get_block_count_request_completed(result: int, response_code: int, _headers: PackedStringArray, body: PackedByteArray) -> void:
+	var res = parse_rpc_result(response_code, body)
+	var height : int = 0
+	if res.has("result"):
+		#print_debug("Result: ", res.result)
+		height = res.result
+		cusf_drivechain_new_block_count.emit(height)
+	else:
+		print_debug("result error")
+		cusf_drivechain_rpc_failed.emit()

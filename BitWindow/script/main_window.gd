@@ -65,8 +65,8 @@ func _on_server_btc_new_blockchain_info(bestblockhash: String, bytes: int, warni
 	$MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/OverviewPage/GridContainer/PanelContainerNetworkStats/VBoxContainer/LabelWarnings.text = warnings_text
 
 
-func _on_server_btc_new_mempool_info(size: int, bytesize: int) -> void:
-	var mempool_size_text = str("Mempool Transactions:\n", size)
+func _on_server_btc_new_mempool_info(ntx: int, bytesize: int) -> void:
+	var mempool_size_text = str("Mempool Transactions:\n", ntx)
 	var mempool_bytes_text = str("Mempool Size:\n", bytesize, " Bytes")
 	$MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/OverviewPage/GridContainer/PanelContainerMempool/VBoxContainer/LabelMempoolSize.text = mempool_size_text
 	$MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/OverviewPage/GridContainer/PanelContainerMempool/VBoxContainer/LabelMempoolByteSize.text = mempool_bytes_text
@@ -178,7 +178,8 @@ func update_wallet_data() -> void:
 
 
 func update_cusf_data() -> void:
-	$Server.rpc_cusf_getblockcount()
+	$Server.rpc_cusf_cat_getblockcount()
+	$Server.rpc_cusf_drivechain_getblockcount()
 
 
 #region Settings Page
@@ -190,29 +191,39 @@ func load_user_settings() -> void:
 
 	$MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/SettingPage/VBoxContainer/HBoxContainer/SpinBoxBitcoinRPCPort.value = $"/root/UserSettings".rpc_port_bitcoin
 	$MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/SettingPage/VBoxContainer/HBoxContainer2/SpinBoxWalletRPCPort.value = $"/root/UserSettings".rpc_port_wallet
-	$MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/SettingPage/VBoxContainer/HBoxContainer3/SpinBoxCUSFPort.value = $"/root/UserSettings".rpc_port_cusf
-
-
+	$MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/SettingPage/VBoxContainer/HBoxContainer3/SpinBoxCUSFCATPort.value = $"/root/UserSettings".rpc_port_cusf_cat
+	$MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/SettingPage/VBoxContainer/HBoxContainer5/SpinBoxCUSFDRIVECHAINPort.value = $"/root/UserSettings".rpc_port_cusf_drivechain
+	
+	
 func _on_line_edit_rpc_user_text_changed(new_text: String) -> void:
 	$"/root/UserSettings".rpc_user = new_text
 	$"/root/UserSettings".save_settings()
+
 
 func _on_line_edit_rpc_pass_text_changed(new_text: String) -> void:
 	$"/root/UserSettings".rpc_pass = new_text
 	$"/root/UserSettings".save_settings()
 
+
 func _on_spin_box_bitcoin_rpc_port_value_changed(value: float) -> void:
 	$"/root/UserSettings".rpc_port_bitcoin = value
 	$"/root/UserSettings".save_settings()
 
+
 func _on_spin_box_wallet_rpc_port_value_changed(value: float) -> void:
 	$"/root/UserSettings".rpc_port_wallet = value
 	$"/root/UserSettings".save_settings()
-
-func _on_spin_box_cusf_port_value_changed(value: float) -> void:
-	$"/root/UserSettings".rpc_port_cusf = value
-	$"/root/UserSettings".save_settings()
 	
+	
+func _on_spin_box_cusf_cat_port_value_changed(value: float) -> void:
+	$"/root/UserSettings".rpc_port_cusf_cat = value
+	$"/root/UserSettings".save_settings()
+
+
+func _on_spin_box_cusf_drivechain_port_value_changed(value: float) -> void:
+	$"/root/UserSettings".rpc_port_cusf_drivechain = value
+	$"/root/UserSettings".save_settings()
+
 #endregion
 
 

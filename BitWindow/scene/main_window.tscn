@@ -861,7 +861,7 @@ layout_mode = 2
 text = "Drivechain CUSF Client RPC Port:
 "
 
-[node name="SpinBoxCUSFPort" type="SpinBox" parent="MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/SettingPage/VBoxContainer/HBoxContainer3"]
+[node name="SpinBoxCUSFCATPort" type="SpinBox" parent="MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/SettingPage/VBoxContainer/HBoxContainer3"]
 layout_mode = 2
 max_value = 999999.0
 
@@ -873,7 +873,7 @@ layout_mode = 2
 text = "OP_CAT CUSF Client RPC Port:
 "
 
-[node name="SpinBoxCUSFPort" type="SpinBox" parent="MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/SettingPage/VBoxContainer/HBoxContainer5"]
+[node name="SpinBoxCUSFDRIVECHAINPort" type="SpinBox" parent="MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/SettingPage/VBoxContainer/HBoxContainer5"]
 layout_mode = 2
 max_value = 999999.0
 
@@ -962,8 +962,6 @@ layout_mode = 2
 [connection signal="btc_new_mempool_info" from="Server" to="." method="_on_server_btc_new_mempool_info"]
 [connection signal="btc_new_network_info" from="Server" to="." method="_on_server_btc_new_network_info"]
 [connection signal="btc_rpc_failed" from="Server" to="." method="_on_server_btc_rpc_failed"]
-[connection signal="cusf_new_block_count" from="Server" to="." method="_on_server_cusf_new_block_count"]
-[connection signal="cusf_rpc_failed" from="Server" to="." method="_on_server_cusf_rpc_failed"]
 [connection signal="wallet_rpc_failed" from="Server" to="." method="_on_server_wallet_rpc_failed"]
 [connection signal="wallet_updated" from="Server" to="." method="_on_server_wallet_updated"]
 [connection signal="toggled" from="MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPageButtons/VBoxContainer/ButtonOverview" to="." method="_on_button_overview_toggled"]
@@ -984,5 +982,5 @@ layout_mode = 2
 [connection signal="text_changed" from="MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/SettingPage/VBoxContainer/HBoxContainer4/LineEditRPCPass" to="." method="_on_line_edit_rpc_pass_text_changed"]
 [connection signal="value_changed" from="MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/SettingPage/VBoxContainer/HBoxContainer/SpinBoxBitcoinRPCPort" to="." method="_on_spin_box_bitcoin_rpc_port_value_changed"]
 [connection signal="value_changed" from="MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/SettingPage/VBoxContainer/HBoxContainer2/SpinBoxWalletRPCPort" to="." method="_on_spin_box_wallet_rpc_port_value_changed"]
-[connection signal="value_changed" from="MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/SettingPage/VBoxContainer/HBoxContainer3/SpinBoxCUSFPort" to="." method="_on_spin_box_cusf_port_value_changed"]
-[connection signal="value_changed" from="MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/SettingPage/VBoxContainer/HBoxContainer5/SpinBoxCUSFPort" to="." method="_on_spin_box_cusf_port_value_changed"]
+[connection signal="value_changed" from="MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/SettingPage/VBoxContainer/HBoxContainer3/SpinBoxCUSFCATPort" to="." method="_on_spin_box_cusf_cat_port_value_changed"]
+[connection signal="value_changed" from="MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/SettingPage/VBoxContainer/HBoxContainer5/SpinBoxCUSFDRIVECHAINPort" to="." method="_on_spin_box_cusf_drivechain_port_value_changed"]
