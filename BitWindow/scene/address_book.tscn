@@ -1,0 +1,42 @@
+[gd_scene load_steps=2 format=3 uid="uid://bw026jt56s5ed"]
+
+[ext_resource type="Script" path="res://script/address_book.gd" id="1_03jsr"]
+
+[node name="AddressBook" type="Window"]
+title = "Address Book"
+initial_position = 2
+size = Vector2i(800, 500)
+script = ExtResource("1_03jsr")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+offset_right = 500.0
+offset_bottom = 450.0
+
+[node name="ItemList" type="ItemList" parent="VBoxContainer"]
+layout_mode = 2
+auto_height = true
+text_overrun_behavior = 0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Add new address:"
+
+[node name="LineEditNewAddress" type="LineEdit" parent="VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(500, 0)
+layout_mode = 2
+placeholder_text = "Enter Address"
+
+[node name="ButtonPaste" type="Button" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Paste"
+
+[node name="ButtonSave" type="Button" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Save"
+
+[connection signal="close_requested" from="." to="." method="_on_close_requested"]
+[connection signal="item_activated" from="VBoxContainer/ItemList" to="." method="_on_item_list_item_activated"]
+[connection signal="pressed" from="VBoxContainer/HBoxContainer/ButtonSave" to="." method="_on_button_save_pressed"]

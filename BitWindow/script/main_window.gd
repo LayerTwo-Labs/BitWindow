@@ -275,3 +275,13 @@ func _on_button_create_sidechain_proposal_pressed() -> void:
 
 
 #endregion
+func _on_button_address_book_pressed() -> void:
+	var scene = load("res://scene/address_book.tscn")
+	var address_book = scene.instantiate()
+	address_book.address_selected.connect(_on_address_book_address_selected)
+	add_child(address_book)
+	
+
+func _on_address_book_address_selected(address : String) -> void:
+	$MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/WalletPage/VBoxContainer/HBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/LineEditDestination.text = address
+

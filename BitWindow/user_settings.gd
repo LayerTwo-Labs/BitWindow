@@ -13,6 +13,9 @@ var rpc_port_wallet : int = DEFAULT_WALLET_RPC_PORT
 var rpc_port_cusf_cat : int = DEFAULT_CUSF_CAT_RPC_PORT
 var rpc_port_cusf_drivechain : int = DEFAULT_CUSF_DRIVECHAIN_RPC_PORT
 
+var directory_bitcoin : String = DEFAULT_BITCOIN_DATA_DIR
+
+var address_book = []
 
 func load_settings() -> void:
 	if !FileAccess.file_exists("user://user_settings.dat"):
@@ -37,3 +40,16 @@ func save_settings() -> void:
 	file.store_var(rpc_port_wallet)
 	file.store_var(rpc_port_cusf_cat)
 	file.store_var(rpc_port_cusf_drivechain)
+func load_address_book() -> void:
+	if !FileAccess.file_exists("user://address_book.dat"):
+		return
+		
+	var file = FileAccess.open("user://address_book.dat", FileAccess.READ)
+	
+	address_book = file.get_var()
+
+
+func save_address_book() -> void:
+	var file = FileAccess.open("user://address_book.dat", FileAccess.WRITE)
+	
+	file.store_var(address_book)

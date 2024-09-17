@@ -244,7 +244,7 @@ text = "Destination Address"
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 
-[node name="Button" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/WalletPage/VBoxContainer/HBoxContainer/PanelContainer/VBoxContainer/HBoxContainer"]
+[node name="ButtonAddressBook" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/WalletPage/VBoxContainer/HBoxContainer/PanelContainer/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 text = "Address Book"
 
@@ -969,6 +969,7 @@ layout_mode = 2
 [connection signal="toggled" from="MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPageButtons/VBoxContainer/ButtonSidechains" to="." method="_on_button_sidechains_toggled"]
 [connection signal="toggled" from="MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPageButtons/VBoxContainer/ButtonCUSF" to="." method="_on_button_cusf_toggled"]
 [connection signal="toggled" from="MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPageButtons/VBoxContainer/ButtonSettings" to="." method="_on_button_settings_toggled"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/WalletPage/VBoxContainer/HBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/ButtonAddressBook" to="." method="_on_button_address_book_pressed"]
 [connection signal="item_activated" from="MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/SidechainPage/SidechainOverview/HBoxContainer/VBoxContainer/PanelContainerSidechains/VBoxContainer/ItemListSidechains" to="." method="_on_item_list_sidechains_item_activated"]
 [connection signal="pressed" from="MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/SidechainPage/SidechainOverview/HBoxContainer/VBoxContainer2/PanelContainerWithdrawals/VBoxContainer/ButtonSetWithdrawalVotes" to="." method="_on_button_set_withdrawal_votes_pressed"]
 [connection signal="pressed" from="MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/SidechainPage/SidechainOverview/HBoxContainer/VBoxContainer2/PanelContainerProposals/VBoxContainer/HBoxContainer/ButtonSetProposalVotes" to="." method="_on_button_set_proposal_votes_pressed"]
