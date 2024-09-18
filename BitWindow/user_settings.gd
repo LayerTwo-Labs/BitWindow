@@ -1,12 +1,10 @@
 extends Node
 
-const DEFAULT_BITCOIN_RPC_PORT : int = 8332
-const DEFAULT_WALLET_RPC_PORT : int = -1 # TODO currently unknown
-const DEFAULT_CUSF_CAT_RPC_PORT : int = -1   # TODO currently unknown
-const DEFAULT_CUSF_DRIVECHAIN_RPC_PORT : int = -1   # TODO currently unknown
-
-var rpc_user : String = ""
-var rpc_pass : String = ""
+const DEFAULT_BITCOIN_RPC_PORT : int = 18443
+const DEFAULT_WALLET_RPC_PORT : int = 18443
+const DEFAULT_CUSF_CAT_RPC_PORT : int = -1 # TODO currently unknown
+const DEFAULT_CUSF_DRIVECHAIN_RPC_PORT : int = 50051 
+const DEFAULT_BITCOIN_DATA_DIR : String = "/home/.bitcoin" 
 
 var rpc_port_bitcoin : int = DEFAULT_BITCOIN_RPC_PORT
 var rpc_port_wallet : int = DEFAULT_WALLET_RPC_PORT
@@ -23,23 +21,23 @@ func load_settings() -> void:
 		
 	var file = FileAccess.open("user://user_settings.dat", FileAccess.READ)
 	
-	rpc_user = file.get_var()
-	rpc_pass = file.get_var()
 	rpc_port_bitcoin = file.get_var()
 	rpc_port_wallet = file.get_var()
 	rpc_port_cusf_cat = file.get_var()
 	rpc_port_cusf_drivechain = file.get_var()
+	directory_bitcoin = file.get_var()
 	
 	
 func save_settings() -> void:
 	var file = FileAccess.open("user://user_settings.dat", FileAccess.WRITE)
 	
-	file.store_var(rpc_user)
-	file.store_var(rpc_pass)
 	file.store_var(rpc_port_bitcoin)
 	file.store_var(rpc_port_wallet)
 	file.store_var(rpc_port_cusf_cat)
 	file.store_var(rpc_port_cusf_drivechain)
+	file.store_var(directory_bitcoin)
+
+
 func load_address_book() -> void:
 	if !FileAccess.file_exists("user://address_book.dat"):
 		return

@@ -47,7 +47,7 @@ func _ready() -> void:
 	timer_cusf_update.start(CUSF_UPDATE_DELAY)
 	
 	call_deferred("display_connection_status")
-	call_deferred("load_user_settings")
+	call_deferred("load_user_settings")	
 
 
 func _on_server_btc_new_block_count(height: int) -> void:
@@ -187,22 +187,20 @@ func update_wallet_data() -> void:
 
 
 func update_cusf_data() -> void:
-	$Server.rpc_cusf_cat_getblockcount()
-	$Server.rpc_cusf_drivechain_getblockcount()
-
-
+	#$Server.rpc_cusf_cat_getblockcount()
+	# TODO
+	$Server.make_grpc_request($Server.GRPC_CUSF_300_301_GET_HEIGHT)
+	
+	
 #region Settings Page
 
 func load_user_settings() -> void:
 	$"/root/UserSettings".load_settings()
-	$MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/SettingPage/VBoxContainer/HBoxContainer4/LineEditRPCUser.text = $"/root/UserSettings".rpc_user
-	$MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/SettingPage/VBoxContainer/HBoxContainer4/LineEditRPCPass.text = $"/root/UserSettings".rpc_pass
-
 	$MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/SettingPage/VBoxContainer/HBoxContainer/SpinBoxBitcoinRPCPort.value = $"/root/UserSettings".rpc_port_bitcoin
 	$MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/SettingPage/VBoxContainer/HBoxContainer2/SpinBoxWalletRPCPort.value = $"/root/UserSettings".rpc_port_wallet
 	$MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/SettingPage/VBoxContainer/HBoxContainer3/SpinBoxCUSFCATPort.value = $"/root/UserSettings".rpc_port_cusf_cat
 	$MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/SettingPage/VBoxContainer/HBoxContainer5/SpinBoxCUSFDRIVECHAINPort.value = $"/root/UserSettings".rpc_port_cusf_drivechain
-	
+	$MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/SettingPage/VBoxContainer/HBoxContainer4/LineEditCoreDataDir.text = $"/root/UserSettings".directory_bitcoin
 	
 func _on_line_edit_rpc_user_text_changed(new_text: String) -> void:
 	$"/root/UserSettings".rpc_user = new_text
@@ -231,6 +229,11 @@ func _on_spin_box_cusf_cat_port_value_changed(value: float) -> void:
 
 func _on_spin_box_cusf_drivechain_port_value_changed(value: float) -> void:
 	$"/root/UserSettings".rpc_port_cusf_drivechain = value
+	$"/root/UserSettings".save_settings()
+	
+	
+func _on_line_edit_core_data_dir_text_changed(new_text: String) -> void:
+	$"/root/UserSettings".directory_bitcoin = new_text
 	$"/root/UserSettings".save_settings()
 
 #endregion

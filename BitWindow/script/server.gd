@@ -30,16 +30,19 @@ signal wallet_rpc_failed()
 signal cusf_cat_rpc_failed()
 signal cusf_drivechain_rpc_failed()
 
+var core_auth_cookie : String = ""
 
 func _on_button_test_connection_bitcoin_pressed() -> void:
 	rpc_bitcoin_getblockcount()
-	rpc_cusf_cat_getblockcount()
-	rpc_cusf_drivechain_getblockcount()
 	rpc_wallet_getbalance()
 
 
-func make_rpc_request(port : int, method: String, params: Variant, http_request: HTTPRequest) -> void:
-	var auth = str($"/root/UserSettings".rpc_user, ":", $"/root/UserSettings".rpc_pass)
+func make_rpc_request(port : int, method: String, params: Variant, http_request: HTTPRequest) -> void:	
+	var auth = get_bitcoin_core_cookie()
+
+	if DEBUG_REQUESTS:	
+		print("Auth Cookie: ", auth)
+		
 	var auth_bytes = auth.to_utf8_buffer()
 	var auth_encoded = Marshalls.raw_to_base64(auth_bytes)
 	var headers: PackedStringArray = []
@@ -49,7 +52,7 @@ func make_rpc_request(port : int, method: String, params: Variant, http_request:
 	var jsonrpc := JSONRPC.new()
 	var req = jsonrpc.make_request(method, params, 1)
 	
-	http_request.request("http://127.0.0.1:" + str(port), headers, HTTPClient.METHOD_POST, JSON.stringify(req))
+	http_request.request(str("http://", auth, "@127.0.0.1:", str(port)), headers, HTTPClient.METHOD_POST, JSON.stringify(req))
 
 
 func parse_rpc_result(response_code, body) -> Dictionary:
@@ -105,24 +108,38 @@ func rpc_wallet_sendtoaddress(address : String, amount : String) -> void:
 
 func rpc_cusf_drivechain_getblockcount() -> void:
 	make_rpc_request($"/root/UserSettings".rpc_port_cusf_drivechain, "getblockcount", [], http_rpc_cusf_drivechain_get_block_count)
+func get_bitcoin_core_cookie() -> String:
+	if !core_auth_cookie.is_empty():
+		return core_auth_cookie
+	
+	var cookie_path : String = str($"/root/UserSettings".directory_bitcoin, "/regtest/.cookie")
+	if !FileAccess.file_exists(cookie_path):
+		return ""
+		
+	var file = FileAccess.open(cookie_path, FileAccess.READ)
+		
+	core_auth_cookie = file.get_as_text()
+	
+	return core_auth_cookie
 
 
 func _on_httprpcbtc_get_block_count_request_completed(_result: int, response_code: int, _headers: PackedStringArray, body: PackedByteArray) -> void:
 	var res = parse_rpc_result(response_code, body)
 	var height : int = 0
 	if res.has("result"):
-		#print_debug("Result: ", res.result)
+		if DEBUG_REQUESTS:
+			print_debug("Result: ", res.result)
 		height = res.result
 		btc_new_block_count.emit(height)
 	else:
-		print_debug("result error")
+		if DEBUG_REQUESTS:
+			print_debug("result error")
 		btc_rpc_failed.emit()
 
 
 func _on_httprpcbtc_get_network_info_request_completed(_result: int, response_code: int, _headers: PackedStringArray, body: PackedByteArray) -> void:
 	var res = parse_rpc_result(response_code, body)
 	if res.has("result"):
-		#print_debug("Result: ", res.result)
 		if not res["result"].has("subversion"):
 			btc_rpc_failed.emit()
 			return
@@ -145,14 +162,14 @@ func _on_httprpcbtc_get_network_info_request_completed(_result: int, response_co
 		
 		btc_new_network_info.emit(subversion, services, peers)
 	else:
-		print_debug("result error")
+		if DEBUG_REQUESTS:
+			print_debug("result error")
 		btc_rpc_failed.emit()
 		
 		
 func _on_http_rpc_btc_get_mempool_info_request_completed(_result: int, response_code: int, _headers: PackedStringArray, body: PackedByteArray) -> void:
 	var res = parse_rpc_result(response_code, body)
 	if res.has("result"):
-		#print_debug("Result: ", res.result)
 		if not res["result"].has("size"):
 			btc_rpc_failed.emit()
 			return
@@ -166,14 +183,14 @@ func _on_http_rpc_btc_get_mempool_info_request_completed(_result: int, response_
 		
 		btc_new_mempool_info.emit(mempool_size, mempool_bytes)
 	else:
-		print_debug("result error")
+		if DEBUG_REQUESTS:
+			print_debug("result error")
 		btc_rpc_failed.emit()
 
 
 func _on_http_rpc_btc_get_blockchain_info_request_completed(_result: int, response_code: int, _headers: PackedStringArray, body: PackedByteArray) -> void:
 	var res = parse_rpc_result(response_code, body)
 	if res.has("result"):
-		#print_debug("Result: ", res.result)
 		if not res["result"].has("bestblockhash"):
 			btc_rpc_failed.emit()
 			return
@@ -197,7 +214,8 @@ func _on_http_rpc_btc_get_blockchain_info_request_completed(_result: int, respon
 		
 		btc_new_blockchain_info.emit(blockchain_best_hash, blockchain_disk_bytes, blockchain_warnings, blockchain_time)
 	else:
-		print_debug("result error")
+		if DEBUG_REQUESTS:
+			print_debug("result error")
 		btc_rpc_failed.emit()
 
 
