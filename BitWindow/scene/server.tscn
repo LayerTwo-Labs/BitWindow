@@ -43,6 +43,16 @@ text = "Test Bitcoin connection"
 
 [node name="HTTPRPCWalletCoreSendToAddress" type="HTTPRequest" parent="RPCRequests"]
 
+[node name="DownloadRequests" type="Node" parent="."]
+
+[node name="HTTPRequestDownloadGrpcurl" type="HTTPRequest" parent="DownloadRequests"]
+download_file = "user://grpcurl.tar.gz"
+timeout = 30.0
+
+[node name="HTTPRequestDownloadGrpcurl300301Proto" type="HTTPRequest" parent="DownloadRequests"]
+download_file = "user://validator.proto"
+timeout = 30.0
+
 [connection signal="wallet_new_address" from="." to="." method="_on_wallet_new_address"]
 [connection signal="pressed" from="ButtonTestConnectionBitcoin" to="." method="_on_button_test_connection_bitcoin_pressed"]
 [connection signal="request_completed" from="RPCRequests/HTTPRPCBTCGetBlockCount" to="." method="_on_httprpcbtc_get_block_count_request_completed"]
@@ -52,3 +62,5 @@ text = "Test Bitcoin connection"
 [connection signal="request_completed" from="RPCRequests/HTTPRPCWalletCoreGetBalance" to="." method="_on_http_rpc_wallet_core_get_balance_request_completed"]
 [connection signal="request_completed" from="RPCRequests/HTTPRPCWalletCoreGetNewAddress" to="." method="_on_http_rpc_wallet_core_get_new_address_request_completed"]
 [connection signal="request_completed" from="RPCRequests/HTTPRPCWalletCoreSendToAddress" to="." method="_on_http_rpc_wallet_core_send_to_address_request_completed"]
+[connection signal="request_completed" from="DownloadRequests/HTTPRequestDownloadGrpcurl" to="." method="_on_http_request_download_grpcurl_request_completed"]
+[connection signal="request_completed" from="DownloadRequests/HTTPRequestDownloadGrpcurl300301Proto" to="." method="_on_http_request_download_grpcurl_300301_proto_request_completed"]
