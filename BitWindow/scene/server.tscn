@@ -37,18 +37,18 @@ text = "Test Bitcoin connection"
 
 [node name="HTTPRPCBTCGetNetworkInfo" type="HTTPRequest" parent="RPCRequests"]
 
-[node name="HTTPRPCWalletGetBalance" type="HTTPRequest" parent="RPCRequests"]
+[node name="HTTPRPCWalletCoreGetBalance" type="HTTPRequest" parent="RPCRequests"]
 
-[node name="HTTPRPCCUSFCATGetBlockCount" type="HTTPRequest" parent="RPCRequests"]
+[node name="HTTPRPCWalletCoreGetNewAddress" type="HTTPRequest" parent="RPCRequests"]
 
-[node name="HTTPRPCCUSFDRIVECHAINGetBlockCount" type="HTTPRequest" parent="RPCRequests"]
+[node name="HTTPRPCWalletCoreSendToAddress" type="HTTPRequest" parent="RPCRequests"]
 
+[connection signal="wallet_new_address" from="." to="." method="_on_wallet_new_address"]
 [connection signal="pressed" from="ButtonTestConnectionBitcoin" to="." method="_on_button_test_connection_bitcoin_pressed"]
 [connection signal="request_completed" from="RPCRequests/HTTPRPCBTCGetBlockCount" to="." method="_on_httprpcbtc_get_block_count_request_completed"]
 [connection signal="request_completed" from="RPCRequests/HTTPRPCBTCGetMempoolInfo" to="." method="_on_http_rpc_btc_get_mempool_info_request_completed"]
 [connection signal="request_completed" from="RPCRequests/HTTPRPCBTCGetBlockchainInfo" to="." method="_on_http_rpc_btc_get_blockchain_info_request_completed"]
 [connection signal="request_completed" from="RPCRequests/HTTPRPCBTCGetNetworkInfo" to="." method="_on_httprpcbtc_get_network_info_request_completed"]
-[connection signal="request_completed" from="RPCRequests/HTTPRPCWalletGetBalance" to="." method="_on_httprpc_wallet_get_balance_request_completed"]
-[connection signal="request_completed" from="RPCRequests/HTTPRPCCUSFCATGetBlockCount" to="." method="_on_http_rpc_cusf_cat_get_block_count_request_completed"]
-[connection signal="request_completed" from="RPCRequests/HTTPRPCCUSFCATGetBlockCount" to="." method="_on_httprpccusfcat_get_block_count_request_completed"]
-[connection signal="request_completed" from="RPCRequests/HTTPRPCCUSFDRIVECHAINGetBlockCount" to="." method="_on_http_rpc_cusf_drivechain_get_block_count_request_completed"]
+[connection signal="request_completed" from="RPCRequests/HTTPRPCWalletCoreGetBalance" to="." method="_on_http_rpc_wallet_core_get_balance_request_completed"]
+[connection signal="request_completed" from="RPCRequests/HTTPRPCWalletCoreGetNewAddress" to="." method="_on_http_rpc_wallet_core_get_new_address_request_completed"]
+[connection signal="request_completed" from="RPCRequests/HTTPRPCWalletCoreSendToAddress" to="." method="_on_http_rpc_wallet_core_send_to_address_request_completed"]

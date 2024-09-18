@@ -4,6 +4,12 @@ const BITCOIN_UPDATE_DELAY : int = 1
 const WALLET_UPDATE_DELAY : int = 1
 const CUSF_UPDATE_DELAY : int = 1
 
+const WALLET_TYPE_CORE : int = 0
+const WALLET_TYPE_BDK : int = 1
+const WALLET_TYPE_ELECTRUM : int = 2
+
+var selected_wallet_type : int = WALLET_TYPE_CORE
+
 var connected_btc : bool = false
 var connected_wallet : bool = false
 var connected_cusf : bool = false
@@ -13,6 +19,7 @@ var timer_wallet_update = null
 var timer_cusf_update = null
 
 var block_height : int = 0
+var receiving_address : String = ""
 
 func _ready() -> void:
 	# For network code debugging, set the server node visible
@@ -175,6 +182,8 @@ func update_bitcoin_data() -> void:
 
 func update_wallet_data() -> void:
 	$Server.rpc_wallet_getbalance()
+	if receiving_address.is_empty():
+		$Server.rpc_wallet_getnewaddress()
 
 
 func update_cusf_data() -> void:
@@ -275,6 +284,20 @@ func _on_button_create_sidechain_proposal_pressed() -> void:
 
 
 #endregion
+
+
+#region Wallet Page
+
+func _on_wallet_select_button_item_selected(index: int) -> void:
+	match index:
+		WALLET_TYPE_CORE:
+			selected_wallet_type = WALLET_TYPE_CORE
+		WALLET_TYPE_BDK:
+			selected_wallet_type = WALLET_TYPE_BDK
+		WALLET_TYPE_ELECTRUM:
+			selected_wallet_type = WALLET_TYPE_ELECTRUM
+
+
 func _on_button_address_book_pressed() -> void:
 	var scene = load("res://scene/address_book.tscn")
 	var address_book = scene.instantiate()
@@ -285,3 +308,24 @@ func _on_button_address_book_pressed() -> void:
 func _on_address_book_address_selected(address : String) -> void:
 	$MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/WalletPage/VBoxContainer/HBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/LineEditDestination.text = address
 
+
+func _on_button_get_new_address_pressed() -> void:
+	$Server.rpc_wallet_getnewaddress()
+
+
+func _on_server_wallet_new_address(address: String) -> void:
+	receiving_address = address
+	$MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/WalletPage/VBoxContainer/HBoxContainer/PanelContainer2/VBoxContainer2/LabelBitcoinAddress.text = address
+
+
+func _on_button_copy_address_pressed() -> void:
+	DisplayServer.clipboard_set(receiving_address)
+
+
+func _on_button_send_pressed() -> void:
+	var dest : String = $MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/WalletPage/VBoxContainer/HBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/LineEditDestination.text
+	var amount : String = str($MarginContainer/VBoxContainer/HBoxContainerPageAndPageButtons/PanelContainerPages/WalletPage/VBoxContainer/HBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/SpinBoxAmount.value)
+	print(dest, " : ", amount)
+	$Server.rpc_wallet_sendtoaddress(dest, amount)
+
+#endregion

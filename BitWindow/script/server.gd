@@ -6,15 +6,10 @@ extends Control
 @onready var http_rpc_btc_get_mempool_info: HTTPRequest = $RPCRequests/HTTPRPCBTCGetMempoolInfo
 @onready var http_rpc_btc_get_blockchain_info: HTTPRequest = $RPCRequests/HTTPRPCBTCGetBlockchainInfo
 
-# Wallet RPC Requests
-@onready var http_rpc_wallet_get_balance: HTTPRequest = $RPCRequests/HTTPRPCWalletGetBalance
-
-# OP_CAT CUSF Client RPC Requests
-@onready var httprpccusfcat_get_block_count: HTTPRequest = $RPCRequests/HTTPRPCCUSFCATGetBlockCount
-
-# Drivechain CUSF client RPC Requests
-@onready var http_rpc_cusf_cat_get_block_count: HTTPRequest = $RPCRequests/HTTPRPCCUSFCATGetBlockCount
-@onready var http_rpc_cusf_drivechain_get_block_count: HTTPRequest = $RPCRequests/HTTPRPCCUSFDRIVECHAINGetBlockCount
+# Bitcoin Core Wallet RPC Requests
+@onready var http_rpc_wallet_core_get_balance: HTTPRequest = $RPCRequests/HTTPRPCWalletCoreGetBalance
+@onready var http_rpc_wallet_core_get_new_address: HTTPRequest = $RPCRequests/HTTPRPCWalletCoreGetNewAddress
+@onready var http_rpc_wallet_core_send_to_address: HTTPRequest = $RPCRequests/HTTPRPCWalletCoreSendToAddress
 
 
 # Signals that should be emitted regularly if connections are working
@@ -24,6 +19,7 @@ signal btc_new_mempool_info(size : int, bytesize : int)
 signal btc_new_blockchain_info(bestblockhash : String, bytes : int, warnings : String, time : int)
 
 signal wallet_updated(btc_balance : int)
+signal wallet_new_address(address : String)
 
 signal cusf_cat_new_block_count(height : int)
 signal cusf_drivechain_new_block_count(height : int)
@@ -89,11 +85,22 @@ func rpc_bitcoin_getblockchaininfo() -> void:
 
 
 func rpc_wallet_getbalance() -> void:
-	make_rpc_request($"/root/UserSettings".rpc_port_wallet, "getbalance", [], http_rpc_wallet_get_balance)
+	# TODO check which wallet type is selected and contact that
+	# For now use bitcoin core wallet
+	make_rpc_request($"/root/UserSettings".rpc_port_wallet, "getbalance", [], http_rpc_wallet_core_get_balance)
 	
 	
-func rpc_cusf_cat_getblockcount() -> void:
-	make_rpc_request($"/root/UserSettings".rpc_port_cusf_cat, "getblockcount", [], http_rpc_cusf_cat_get_block_count)
+func rpc_wallet_getnewaddress() -> void:
+	# TODO check which wallet type is selected and contact that
+	# For now use bitcoin core wallet
+	make_rpc_request($"/root/UserSettings".rpc_port_wallet, "getnewaddress", [], http_rpc_wallet_core_get_new_address)
+	
+	
+func rpc_wallet_sendtoaddress(address : String, amount : String) -> void:
+	# TODO check which wallet type is selected and contact that
+	# For now use bitcoin core wallet
+	make_rpc_request($"/root/UserSettings".rpc_port_wallet, "sendtoaddress", [address, amount], http_rpc_wallet_core_send_to_address)
+
 
 
 func rpc_cusf_drivechain_getblockcount() -> void:
@@ -194,7 +201,7 @@ func _on_http_rpc_btc_get_blockchain_info_request_completed(_result: int, respon
 		btc_rpc_failed.emit()
 
 
-func _on_httprpc_wallet_get_balance_request_completed(_result: int, response_code: int, _headers: PackedStringArray, body: PackedByteArray) -> void:
+func _on_http_rpc_wallet_core_get_balance_request_completed(result: int, response_code: int, _headers: PackedStringArray, body: PackedByteArray) -> void:
 	var res = parse_rpc_result(response_code, body)
 	var balance : int = 0
 	if res.has("result"):
@@ -202,29 +209,35 @@ func _on_httprpc_wallet_get_balance_request_completed(_result: int, response_cod
 		balance = res.result
 		wallet_updated.emit(balance)
 	else:
-		print_debug("result error")
+		if DEBUG_REQUESTS:
+			print_debug("result error")
 		wallet_rpc_failed.emit()
 
 
-func _on_http_rpc_cusf_cat_get_block_count_request_completed(result: int, response_code: int, _headers: PackedStringArray, body: PackedByteArray) -> void:
+func _on_http_rpc_wallet_core_get_new_address_request_completed(result: int, response_code: int, headers: PackedStringArray, body: PackedByteArray) -> void:
 	var res = parse_rpc_result(response_code, body)
-	var height : int = 0
+	var address : String = ""
 	if res.has("result"):
 		#print_debug("Result: ", res.result)
-		height = res.result
-		cusf_cat_new_block_count.emit(height)
+		address = res.result
+		#wallet_updated.emit(balance)
+		#print_debug("new addr: ", address)
+		wallet_new_address.emit(address)
 	else:
-		print_debug("result error")
-		cusf_cat_rpc_failed.emit()
+		if DEBUG_REQUESTS:
+			print_debug("result error")
+		wallet_rpc_failed.emit()
 
 
-func _on_http_rpc_cusf_drivechain_get_block_count_request_completed(result: int, response_code: int, _headers: PackedStringArray, body: PackedByteArray) -> void:
+func _on_http_rpc_wallet_core_send_to_address_request_completed(result: int, response_code: int, headers: PackedStringArray, body: PackedByteArray) -> void:
 	var res = parse_rpc_result(response_code, body)
-	var height : int = 0
+	var txid : String = ""
 	if res.has("result"):
-		#print_debug("Result: ", res.result)
-		height = res.result
-		cusf_drivechain_new_block_count.emit(height)
+		print_debug("Result: ", res.result)
+		txid = res.result
+		#wallet_updated.emit(balance)
 	else:
-		print_debug("result error")
-		cusf_drivechain_rpc_failed.emit()
+		if DEBUG_REQUESTS:
+			print_debug("result error")
+		wallet_rpc_failed.emit()
+
